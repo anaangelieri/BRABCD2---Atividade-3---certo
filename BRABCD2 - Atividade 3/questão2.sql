@@ -171,6 +171,21 @@ join DISCIPLINA D on T.Numero_disciplina = D.Numero_disciplina
 where A.Nome = 'Braga' and H.Nota > (select CalcularMedia('Braga'));
 
 
-
+SELECT d.Nome_disciplina
+FROM DISCIPLINA d
+JOIN TURMA t ON d.Numero_disciplina = t.Numero_disciplina
+JOIN HISTORICO_ESCOLAR he ON t.Identificacao_turma = he.Identificacao_turma
+JOIN ALUNO a ON he.Numero_aluno = a.Numero_aluno
+WHERE a.Nome = 'Braga'
+GROUP BY d.Nome_disciplina
+HAVING AVG(
+    CASE 
+        WHEN he.Nota = 'A' THEN 4.0
+        WHEN he.Nota = 'B' THEN 3.0
+        WHEN he.Nota = 'C' THEN 2.0
+        WHEN he.Nota = 'D' THEN 1.0
+        ELSE 0.0
+    END
+) > (select CalcularMedia('Braga'));
 
 
